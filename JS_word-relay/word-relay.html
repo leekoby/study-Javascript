@@ -27,29 +27,34 @@
           //  비어있다.
           word = newWord;
           $word.textContent = word;
-          $input.value = ""; //input 빈칸으로 초기화
           const order = parseInt($order.textContent); //현재 순서
           if (order === number) {
             $order.textContent = 1;
           } else {
             $order.textContent = order + 1;
           }
+          $input.value = ""; //input 빈칸으로 초기화
+          $input.focus();
         } else {
           //  비어있지 않다
           if (word[word.length - 1] === newWord[0]) {
             //올바른가? 기존 문자열 마지막과 입력값 첫번째자리가 동일한가?
             word = newWord;
             $word.textContent = word;
-            $input.value = ""; //input 빈칸으로 초기화
             const order = parseInt($order.textContent); //현재 순서
             if (order === number) {
               $order.textContent = 1;
             } else {
               $order.textContent = order + 1;
             }
+            $input.value = ""; //input 빈칸으로 초기화
+            $input.focus();
           } else {
-            //올바르지 않은가
+            //올바르지 않다
+            alert("올바르지 않은 단어입니다!");
           }
+          $input.value = ""; //input 빈칸으로 초기화
+          $input.focus();
         }
       };
       const onInput = (event) => {
