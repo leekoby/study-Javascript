@@ -60,19 +60,17 @@
     let numTwo = '';
     const $operator = document.querySelector('#operator');
     const $result = document.querySelector('#result');
-    const onClickNumber = (event) => {
+    const onClickNumber = (e) => {
       if (!operator) {
-        // 비어있다
-        numOne += event.target.textContent;
-        $result.value += event.target.textContent;
+        numOne += e.target.textContent;
+        $result.value = numOne;
         return;
       }
-      // 비어있지 않다
       if (!numTwo) {
-        $result.value = '';
+        $result.value = ' ';
       }
-      numTwo += event.target.textContent;
-      $result.value += event.target.textContent;
+      numTwo += e.target.textContent;
+      $result.value = numTwo;
     };
     document.querySelector('#num-0').addEventListener('click', onClickNumber);
     document.querySelector('#num-1').addEventListener('click', onClickNumber);
@@ -86,36 +84,37 @@
     document.querySelector('#num-9').addEventListener('click', onClickNumber);
 
     const onClickOperator = (op) => () => {
-      if (op === '-' && !numOne) {
-        numOne += op;
-        $result.value = op;
-        return;
-      }
       if (numTwo) {
         switch (operator) {
           case '+':
             $result.value = parseInt(numOne) + parseInt(numTwo);
             break;
           case '-':
-            $result.value = numOne - numTwo;
-            break;
-          case '*':
-            $result.value = numOne * numTwo;
+            $result.value = parseInt(numOne) - parseInt(numTwo);
             break;
           case '/':
-            $result.value = numOne / numTwo;
+            $result.value = parseInt(numOne) / parseInt(numTwo);
+            break;
+          case 'x':
+            $result.value = parseInt(numOne) * parseInt(numTwo);
             break;
           default:
             break;
         }
         numOne = $result.value;
         numTwo = '';
+        operator = '';
       }
-      if (numOne) {
+
+      if (!numOne) {
+        numOne = op;
+        $result.value = op;
+      } else if (numOne && !operator) {
         operator = op;
         $operator.value = op;
-      } else {
-        alert('숫자를 먼저 입력하세요.');
+      } else if (operator && !numTwo) {
+        numTwo = op;
+        $result.value = op;
       }
     };
     document.querySelector('#plus').addEventListener('click', onClickOperator('+'));
