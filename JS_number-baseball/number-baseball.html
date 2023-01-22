@@ -1,14 +1,84 @@
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>숫자야구</title>
-  </head>
-  <body>
-    <form id="form">
-      <input type="text" id="input" />
-      <button>확인</button>
-    </form>
-    <div id="logs"></div>
-    <script></script>
-  </body>
-</html>
+<body>
+  <div>Play Number baseball!</div>
+  <form id="form">
+    <input type="text" id="input_arr" />
+    <input type="submit" value="play!" id="play" />
+    <div id="game_result"></div>
+  </form>
+
+  <script>
+    const $input_arr = document.querySelector('#input_arr');
+    const $form = document.querySelector('#form');
+    const $game_result = document.querySelector('#game_result');
+
+    const arr = [];
+    for (i = 0; i < 9; i++) {
+      arr.push(i + 1);
+    }
+    //컴퓨터 정답지 뽑을 배열 생성
+    const computer_arr = [];
+    for (i = 0; i < 4; i++) {
+      let num = Math.floor(Math.random() * arr.length);
+      computer_arr.push(arr[num]);
+      arr.splice(num, 1);
+    }
+    //컴퓨터의 정답 배열 생성
+
+    //사용자 입력
+    const ans_arr = [];
+    inputver = () => {
+      if (user.length !== 4) {
+        return alert('네자릿수가 아닙니다.');
+      }
+      if (ans_arr.includes(user)) {
+        return alert('이미 작성한 답안입니다.');
+      }
+      if (new Set(user).size !== 4) {
+        return alert('답안에 중복값이 있습니다.');
+      }
+      return true;
+    };
+    let user;
+    let strike = 0;
+    let ball = 0;
+    let out = 0;
+
+    strikeBallCal = () => {
+      if (user === computer_arr.join('')) {
+        return $game_result.append('Home Run!');
+      }
+      if (ans_arr.length === 9) {
+        return $game_result.append(`끝! 결과는 ${computer_arr}...`);
+      }
+
+      computer_arr.forEach((element, inx) => {
+        if (parseInt(element) === parseInt(user[inx])) {
+          return strike++;
+        }
+        if (user.includes(parseInt(element))) {
+          return ball++;
+        }
+      });
+      if (strike === 0 && ball === 0) {
+        out++;
+      }
+      if (out === 3) {
+        return $game_result.append(`삼진 아웃`);
+      }
+      return $game_result.append(`${user} : ${strike}스트라이크 ${ball}볼 ${out}아웃 `, document.createElement('br'));
+    };
+    const submitf = (event) => {
+      event.preventDefault();
+      user = $input_arr.value;
+      strike = 0;
+      ball = 0;
+
+      if (inputver()) {
+        strikeBallCal();
+        ans_arr.push(user);
+      }
+      $input_arr.value = '';
+    };
+    $form.addEventListener('submit', submitf);
+  </script>
+</body>
