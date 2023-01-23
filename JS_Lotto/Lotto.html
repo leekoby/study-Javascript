@@ -20,5 +20,39 @@
 <body>
   <div id="result">추첨 결과는?</div>
   <div id="bonus">보너스:</div>
-  <script></script>
+  <script>
+    const candidate = Array(45)
+      .fill()
+      .map((v, i) => i + 1);
+    const shuffle = [];
+    for (let i = candidate.length; i > 0; i--) {
+      const random = Math.floor(Math.random() * i); // 무작위 인덱스 뽑기
+
+      const spliceArray = candidate.splice(random, 1); // 뽑은 값은 배열에 들어 있음
+      const value = spliceArray[0]; //배열의 들어있는 값
+      shuffle.push(value); // 꺼내서 shuffle에 넣기
+    }
+
+    console.log(shuffle);
+    const winBalls = shuffle.slice(0, 6).sort((a, b) => a - b);
+    const bonus = shuffle[6];
+    console.log(winBalls, bonus);
+
+    const $result = document.querySelector('#result');
+    function drawBalls(number, $parent) {
+      const $ball = document.createElement('div');
+      $ball.className = 'ball';
+      $ball.textContent = number;
+      $parent.appendChild($ball);
+    }
+    for (let i = 0; i < winBalls.length; i++) {
+      setTimeout(() => {
+        drawBalls(winBalls[i], $result);
+      }, (i + 1) * 1000);
+    }
+    const $bonus = document.querySelector('#bonus');
+    setTimeout(() => {
+      drawBalls(bonus, $bonus);
+    }, 7000);
+  </script>
 </body>
